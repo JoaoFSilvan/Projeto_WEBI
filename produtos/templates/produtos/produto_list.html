@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load l10n %}
+
+{% block title %}Produtos{% endblock %}
+
+{% block content %}
+
+<h2>Produtos</h2>
+
+{% if produtos %}
+
+{% for produto in produtos %}
+
+<article>
+
+    <h3>
+        <a href="{% url 'produto-detail' produto.pk %}">
+            {{ produto.nome }}
+        </a>
+    </h3>
+
+    <p>
+        {{ produto.descricao }}
+    </p>
+
+    <p>
+        R$ {{ produto.preco }}
+    </p>
+
+    <div class="avaliacao-resumo">
+
+        <div class="estrelas-media" style="--media: {{ produto.media_avaliacoes|unlocalize }};">
+            <span>★★★★★</span>
+        </div>
+
+        <span class="quantidade-avaliacoes">
+            ({{ produto.avaliacoes.count }} avaliações)
+        </span>
+
+        <span class="media-numero">
+            {{ produto.media_avaliacoes|floatformat:1 }}/5
+        </span>
+
+    </div>
+
+</article>
+
+{% endfor %}
+
+{% else %}
+
+<p>
+    Nenhum produto cadastrado.
+</p>
+
+{% endif %}
+
+{% endblock %}

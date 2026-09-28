@@ -1,0 +1,61 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Avalia+{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'produtos/css/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Avalia+</h1>
+            <nav>
+
+            <a href="{% url 'produto-list' %}">
+                Produtos
+            </a>
+
+            <a href="{% url 'produto-create' %}">
+                Cadastrar produto
+            </a>
+
+            {% if user.is_authenticated %}
+
+                <span>
+                    Olá, {{ user.username }}
+                </span>
+
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button class="botao-sair" type="submit">
+                        Sair
+                    </button>
+                </form>
+
+            {% else %}
+
+                <a href="{% url 'login' %}">
+                    Entrar
+                </a>
+
+            {% endif %}
+
+        </nav>
+    </header>
+
+    <main>
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+</body>
+
+</html>

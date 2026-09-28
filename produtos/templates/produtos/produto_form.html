@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Cadastrar produto
+{% endblock %}
+
+{% block content %}
+
+<h2>Cadastrar produto</h2>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        Cadastrar
+    </button>
+
+</form>
+
+<a href="{% url 'produto-list' %}">
+    Voltar
+</a>
+
+{% endblock %}

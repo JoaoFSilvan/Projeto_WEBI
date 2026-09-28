@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ produto.nome }}{% endblock %}
+
+{% block content %}
+
+<h2>{{ produto.nome }}</h2>
+
+<p>
+    <strong>Descrição:</strong>
+    {{ produto.descricao }}
+</p>
+
+<p>
+    <strong>Preço:</strong>
+    R$ {{ produto.preco }}
+</p>
+
+
+<!-- RESUMO DAS AVALIAÇÕES DO PRODUTO -->
+
+<div class="avaliacao-resumo">
+
+    <div
+        class="estrelas-media"
+        style="--media: {{ produto.media_avaliacoes }};"
+    >
+        <span>★★★★★</span>
+    </div>
+
+    <span class="media-numero">
+        {{ produto.media_avaliacoes|floatformat:1 }}/5
+    </span>
+
+    <span class="quantidade-avaliacoes">
+        ({{ produto.avaliacoes.count }} avaliações)
+    </span>
+
+</div>
+
+
+<br>
+
+
+<!-- ÁREA PARA AVALIAR -->
+
+{% if user.is_authenticated %}
+
+    {% if ja_avaliou %}
+
+        <p>
+            <strong>
+                Você já avaliou este produto.
+            </strong>
+        </p>
+
+    {% else %}
+
+        <a href="{% url 'avaliacao-create' produto.pk %}">
+            Avaliar este produto
+        </a>
+
+    {% endif %}
+
+{% else %}
+
+    <a href="{% url 'login' %}">
+        Entre para avaliar este produto.
+    </a>
+
+{% endif %}
+
+
+<br><br>
+
+
+<!-- AÇÕES DO PRODUTO -->
+
+<a href="{% url 'produto-update' produto.pk %}">
+    Editar produto
+</a>
+
+<br>
+
+<a href="{% url 'produto-delete' produto.pk %}">
+    Excluir produto
+</a>
+
+<br>
+
+<a href="{% url 'produto-list' %}">
+    Voltar para produtos
+</a>
+
+
+<hr>
+
+
+<!-- AVALIAÇÕES INDIVIDUAIS -->
+
+<h3>Avaliações</h3>
+
+{% for avaliacao in produto.avaliacoes.all %}
+
+    <article>
+
+        <strong>
+            {{ avaliacao.usuario.username }}
+        </strong>
+
+        <br>
+
+        <div
+            class="estrelas-media"
+            style="--media: {{ avaliacao.nota }};"
+        >
+            <span>★★★★★</span>
+        </div>
+
+        {% if avaliacao.comentario %}
+
+            <p>
+                {{ avaliacao.comentario }}
+            </p>
+
+        {% endif %}
+
+        <small>
+            {{ avaliacao.criado_em|date:"d/m/Y H:i" }}
+        </small>
+
+    </article>
+
+{% empty %}
+
+    <p>
+        Ainda não existem avaliações.
+    </p>
+
+{% endfor %}
+
+{% endblock %}
